@@ -1,0 +1,27 @@
+services:
+  # Web Service (FastAPI Backend)
+  - type: web
+    name: qide-cs-backend
+    runtime: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port 10000
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: qide-cs-db
+          property: connectionString
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: DASHSCOPE_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+
+databases:
+  # PostgreSQL Database
+  - name: qide-cs-db
+    databaseName: qide_cs
+    user: qide_user
+    plan: free # Optional: 'starter' or 'standard' for paid plans
